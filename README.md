@@ -26,9 +26,9 @@ docs/
 - [video-notes](https://github.com/czh55/video-notes)：咖啡、摄影、绘画、影视、家装、职场表达等
 - [audio-workshop](https://github.com/czh55/audio-workshop)：饭菜、摄影审美、古典聆听、沟通、叙事细读等
 
-厚度写在各类别页底部。啤酒、游戏、雕塑等标注「待补源」的，只立了脚手架。
+厚度写在各类别页底部；「参考资料」列出具体标题与可点开的站内链接（`chenzhiheng.cn/video-notes`、`chenzhiheng.cn/audio-workshop`）。啤酒、游戏等暂无条目的，只立脚手架。
 
-重生成类别页：
+重生成类别页（会读取两个仓库的 `docs/index.json` 解析标题）：
 
 ```bash
 python3 scripts/build_category_veins.py

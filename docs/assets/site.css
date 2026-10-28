@@ -252,6 +252,37 @@ h1.page-title {
 }
 .source-pill.thin { border-style: dashed; color: var(--faint); }
 
+.ref-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+.ref-list li {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.ref-list li:first-child { border-top: none; }
+.ref-src {
+  color: var(--faint);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.ref-list a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: #d4c4b0;
+  text-underline-offset: 3px;
+}
+.ref-list a:hover { color: var(--seal); text-decoration-color: var(--seal); }
+@media (max-width: 640px) {
+  .ref-list li { grid-template-columns: 1fr; gap: 4px; }
+}
+
 .empty {
   border: 1px dashed #cfc3b2;
   background: var(--seal-soft);

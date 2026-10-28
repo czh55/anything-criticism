@@ -521,6 +521,87 @@ PAGES = [
   },
 ]
 
+# slug -> video-notes note slugs / audio-workshop stems / optional category-summary id
+REFS = {
+  "dishes": {
+    "vn": ["stir-fry-water-mistake", "stir-fry-seasoning-formula", "rest-steak-before-slicing", "pork-cuts-map", "eighty-cooking-tips"],
+    "aw": ["lidan-deng-sichuan-chef-50y", "hidden_menu_vip_dining", "italian_food_ordering", "japan_cooking"],
+  },
+  "coffee": {
+    "summary": "coffee",
+    "vn": ["latte-details", "sca-latte-art-exam", "foam-thickness", "extraction-latte-impact", "coffee-clean-cup-meaning", "become-coffee-connoisseur-fast", "espresso-crema-thickness-myth"],
+    "aw": ["coffee_20years", "iiac_coffee_gold_award"],
+  },
+  "wine": {
+    "vn": ["wine-business-and-aesthetics", "five-wine-tasting-terms", "red-wine-aeration", "decant-wine-two-charts", "six-wine-grapes", "sommelier-blind-tasting-contest"],
+    "aw": [],
+  },
+  "beer": {"vn": [], "aw": []},
+  "interior": {
+    "summary": "home",
+    "vn": ["lighting-texture-layers", "home-color-enlarge", "home-look-bigger-3tips", "home-weaken-boundaries", "home-need-focal-point", "home-soft-curves"],
+    "aw": ["ikea_stockholm2025", "quanji_hotel_oriental_aesthetics", "morandi_color_misconception"],
+  },
+  "architecture": {
+    "vn": ["one-house-vs-zijian", "western-architecture-ten-styles", "urban-village-answer"],
+    "aw": ["harry_potter_hogwarts_architecture", "museum_staged_reality"],
+  },
+  "photo": {
+    "summary": "photo",
+    "vn": ["harmony-shooting", "photo-light-ratio", "photo-refine-trap-ai-era", "photo-framework-visual-lang", "candid-life", "lively-poses", "photo-clarity"],
+    "aw": ["feipian_photography", "shemei_qutong", "travel-camera-spring-guide"],
+  },
+  "painting": {
+    "summary": "painting",
+    "vn": ["value-order-key", "value-vs-chroma", "paint-relation-not-color", "purity-order-premium", "warm-cool-way", "how-to-match-colors", "negative-space-importance", "klimt-unity-variety"],
+    "aw": ["morandi_color_misconception"],
+  },
+  "sculpture": {
+    "vn": ["clothing-folds-from-sculpture"],
+    "aw": ["museum_staged_reality"],
+  },
+  "calligraphy": {
+    "vn": ["calligraphy-first-principles"],
+    "aw": [],
+  },
+  "story": {
+    "summary": "video",
+    "vn": ["2nIYM8mRzxo", "VCTwn3d4Uw", "what-is-montage", "five-common-montages", "how-to-use-transitions"],
+    "aw": ["zhang_ailing_analysis", "liuzhenyun_ep01_dialogue"],
+  },
+  "comic": {
+    "vn": [],
+    "aw": ["one_piece_finale_roundtable"],
+  },
+  "film": {
+    "summary": "film",
+    "vn": ["joker-film-pull-part1", "zhouxingchi-audiovisual", "audiovisual-whitespace-power", "dry-film-pull-technique", "camera-movement-apple"],
+    "aw": ["matt-damon-odyssey", "harry_potter_hogwarts_architecture"],
+  },
+  "tv": {
+    "vn": ["us-tv-top10-2026", "top10-british-drama-21c"],
+    "aw": ["duanju_chuhai"],
+  },
+  "game": {"vn": [], "aw": []},
+  "instrument": {
+    "vn": ["piano-fingertip-catch", "easy-slow-song-entry-beat"],
+    "aw": [],
+  },
+  "music": {
+    "vn": ["music-theory-modulation", "zhao-jun-authority"],
+    "aw": ["gudian_antineihao_ep11", "gudian_commute_ep3", "tower-records-shibuya", "five_sounds_end_of_world", "taipei-witch-house"],
+  },
+  "speech": {
+    "summary": "workplace",
+    "vn": ["wangziru-how-to-improve-eloquence", "work-good-standard", "certainty-boss-wants", "chat-for-feelings-not-facts", "high-eq-no-filler-words", "s-rhythm"],
+    "aw": ["jundongkou_communication_ep250", "smalltalk_scenes_art", "exit_expression_contest_daily_life"],
+  },
+}
+
+VN_BASE = "https://chenzhiheng.cn/video-notes/"
+AW_BASE = "https://chenzhiheng.cn/audio-workshop/"
+PROJECTS = Path("/Users/chenzhiheng/Projects")
+
 TPL = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -580,6 +661,12 @@ TPL = """<!DOCTYPE html>
       </div>
     </section>
 
+    <section class="panel">
+      <h2>参考资料</h2>
+      <p class="hint">下列为站内消化稿标题与链接（可点开）。原平台链接见各总结页内标注。</p>
+{refs}
+    </section>
+
     <section class="block">
       <h2>已记录</h2>
       <div class="empty">
@@ -600,7 +687,60 @@ TPL = """<!DOCTYPE html>
 """
 
 
-def render(page: dict) -> str:
+def load_indexes():
+    import json
+
+    vn_list = json.loads((PROJECTS / "video-notes/docs/index.json").read_text(encoding="utf-8"))
+    aw_list = json.loads((PROJECTS / "audio-workshop/docs/index.json").read_text(encoding="utf-8"))
+    vn = {x["slug"]: x for x in vn_list}
+    aw = {}
+    for x in aw_list:
+        fn = x.get("filename") or ""
+        stem = fn.replace("-总结.svg", "").replace("-总结.html", "")
+        if stem:
+            aw[stem] = x
+    return vn, aw
+
+
+def resolve_refs(slug: str, vn: dict, aw: dict) -> str:
+    cfg = REFS.get(slug) or {}
+    items = []
+    summary = cfg.get("summary")
+    if summary:
+        items.append(
+            (
+                "video-notes · 类目总结",
+                f"{VN_BASE}category-summaries/{summary}-总结.html",
+                {"coffee": "咖啡手作", "photo": "摄影拍摄", "painting": "绘画造型", "film": "影视视听", "home": "家装空间", "workplace": "职场表达", "video": "视频制作"}.get(summary, summary)
+                + " · 核心观点",
+            )
+        )
+    for s in cfg.get("vn") or []:
+        it = vn.get(s)
+        if not it:
+            print(f"  warn missing vn:{s}")
+            continue
+        html = (it.get("outputs") or {}).get("html") or f"{s}-图文实录.html"
+        items.append(("video-notes", f"{VN_BASE}{html}", it["title"]))
+    for stem in cfg.get("aw") or []:
+        it = aw.get(stem)
+        if not it:
+            print(f"  warn missing aw:{stem}")
+            continue
+        html = (it.get("filename") or f"{stem}-总结.svg").replace("-总结.svg", "-总结.html")
+        items.append(("audio-workshop", f"{AW_BASE}{html}", it["title"]))
+
+    if not items:
+        return '      <p class="hint">暂无站内对应条目，脉络为脚手架，待补源。</p>'
+
+    lis = "\n".join(
+        f'        <li><span class="ref-src">{src}</span><a href="{href}" target="_blank" rel="noopener">{title}</a></li>'
+        for src, href, title in items
+    )
+    return f'      <ul class="ref-list">\n{lis}\n      </ul>'
+
+
+def render(page: dict, vn: dict, aw: dict) -> str:
     points = "\n".join(
         f"""        <article class="vein-item">
           <b>{i:02d}</b>
@@ -628,14 +768,16 @@ def render(page: dict) -> str:
         bounds=bounds,
         items=items,
         sources=sources,
+        refs=resolve_refs(page["slug"], vn, aw),
     )
 
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
+    vn, aw = load_indexes()
     for page in PAGES:
         path = OUT / f"{page['slug']}.html"
-        path.write_text(render(page), encoding="utf-8")
+        path.write_text(render(page, vn, aw), encoding="utf-8")
         print("wrote", path.name)
     print("total", len(PAGES))
 
