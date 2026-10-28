@@ -1,6 +1,6 @@
 # 评鉴
 
-把饭菜、咖啡、酒、空间、图像、叙事和说话收成同一件事：判断好坏。静态站放在 `docs/`，用 GitHub Pages 从该目录发布，方式和 [video-notes](https://github.com/czh55/video-notes) 一样。
+把饭菜、咖啡、酒、空间、图像、叙事、声音和说话收成同一件事：判断好坏。静态站放在 `docs/`，用 GitHub Pages 从该目录发布，方式和 [video-notes](https://github.com/czh55/video-notes) 一样。
 
 ## 发布
 
@@ -13,7 +13,7 @@
 
 ```
 docs/
-├── index.html              # 首页：主张 + 十四个类别
+├── index.html              # 首页：主张 + 十六个类别
 ├── method.html             # 跨类别的五步
 ├── categories/*.html       # 各类别占位，之后往里写条目
 └── assets/site.css
