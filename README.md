@@ -13,7 +13,7 @@
 
 ```
 docs/
-├── index.html              # 首页：主张 + 十六个类别
+├── index.html              # 首页：主张 + 十八个类别
 ├── method.html             # 跨类别的五步
 ├── categories/*.html       # 各类别占位，之后往里写条目
 └── assets/site.css
