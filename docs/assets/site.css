@@ -189,6 +189,69 @@ h1.page-title {
 .panel li, .block li { margin: 6px 0; }
 .hint { color: var(--muted); font-size: 14px; }
 
+.vein {
+  margin: 8px 0 28px;
+}
+.vein-thesis {
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.55;
+  margin: 0 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.vein-grid {
+  display: grid;
+  gap: 14px;
+}
+.vein-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 12px;
+  padding: 4px 0;
+}
+.vein-item b {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--seal);
+  line-height: 1.2;
+}
+.vein-item h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-family: var(--serif);
+  font-weight: 600;
+}
+.vein-item p { margin: 0; color: var(--muted); font-size: 14px; }
+
+.fail-list, .bound-list {
+  margin: 0 0 8px;
+  padding-left: 1.2em;
+}
+.fail-list li, .bound-list li { margin: 8px 0; color: var(--ink); }
+
+.source-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+.source-pill {
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+  padding: 6px 10px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.source-pill strong {
+  color: var(--ink);
+  font-weight: 600;
+  margin-right: 4px;
+}
+.source-pill.thin { border-style: dashed; color: var(--faint); }
+
 .empty {
   border: 1px dashed #cfc3b2;
   background: var(--seal-soft);
